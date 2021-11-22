@@ -29,6 +29,7 @@ public class HbmRun {
 
             session.getTransaction().commit();
             session.close();
+            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
