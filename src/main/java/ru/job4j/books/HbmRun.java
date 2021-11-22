@@ -17,19 +17,25 @@ public class HbmRun {
 
             Book one = Book.of("Java threads");
             Book two = Book.of("Java");
+            Book three = Book.of("Postgres");
 
             Author first = Author.of("Head First");
             first.getBooks().add(one);
+            first.getBooks().add(three);
 
             Author second = Author.of("Gerbert Schildt");
             second.getBooks().add(two);
+            second.getBooks().add(three);
 
             session.persist(first);
             session.persist(second);
 
+            Author author = session.get(Author.class, 1);
+            session.remove(author);
+
             session.getTransaction().commit();
             session.close();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
