@@ -10,6 +10,7 @@ import org.hibernate.query.Query;
 
 public class HbmRun {
     public static void main(String[] args) {
+        Student rsl = null;
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure().build();
         try {
@@ -17,19 +18,26 @@ public class HbmRun {
             Session session = sf.openSession();
             session.beginTransaction();
 
-            Student one = Student.of("Alex", 21, "Moskow");
-            Student two = Student.of("Nikolay", 28, "Saint-Petesburg");
-            Student three = Student.of("Nikita", 25, "Kaliningrad");
+            rsl = session.createQuery(
+                    "select distinct st from Student st "
+                    + "join fetch st.account a "
+                    + "join fetch a.books b "
+                    + "where st.id = :sid", Student.class
+            )
+                    .setParameter("sid", 1)
+                    .uniqueResult();
 
+            Student one = Student.of("Иванов Иван", 20, "Москва");
             session.save(one);
-            session.save(two);
-            session.save(three);
 
-            session.createQuery("insert into Student (name, age, city) "
-                    + "select concat(s.name, 'NEW'), s.age + 5, s.city "
-                    + "from Student s where s.id = :fid")
-            .setParameter("fid", 1)
-            .executeUpdate();
+            Account two = Account.of("root");
+            session.save(two);
+
+            Book book1 = Book.of("Двенадцать стульев", "ACT");
+            Book book2 = Book.of("Одноэтажная Америка", "текст");
+            session.save(book1);
+            session.save(book2);
+
 
 
             session.getTransaction().commit();
@@ -39,5 +47,6 @@ public class HbmRun {
         } finally {
             StandardServiceRegistryBuilder.destroy(registry);
         }
+        System.out.println(rsl);
     }
 }

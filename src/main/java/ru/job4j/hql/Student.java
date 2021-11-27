@@ -1,6 +1,5 @@
 package ru.job4j.hql;
 
-import org.hibernate.annotations.Generated;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -18,12 +17,23 @@ public class Student {
 
     private String city;
 
+    @OneToOne
+    private Account account;
+
     public static Student of(String name, int age, String city) {
         Student student = new Student();
         student.name = name;
         student.age = age;
         student.city = city;
         return student;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public int getId() {

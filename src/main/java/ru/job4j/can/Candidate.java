@@ -16,12 +16,23 @@ public class Candidate {
 
     private int salary;
 
+    @OneToOne
+    private BaseVacancies baseVacancies;
+
     public static Candidate of(String name, String experience, int salary) {
         Candidate candidate = new Candidate();
         candidate.name = name;
         candidate.experience = experience;
         candidate.salary = salary;
         return candidate;
+    }
+
+    public BaseVacancies getBaseVacancies() {
+        return baseVacancies;
+    }
+
+    public void setBaseVacancies(BaseVacancies baseVacancies) {
+        this.baseVacancies = baseVacancies;
     }
 
     public int getId() {
@@ -71,7 +82,7 @@ public class Candidate {
 
     @Override
     public String toString() {
-        return String.format("Candidate: id =%s, name =%s, experience =%s, salary =%s",
-                id, name, experience, salary);
+        return String.format("Candidate: id =%s, name =%s, experience =%s, salary =%s, baseVacancies =%s",
+                id, name, experience, salary, baseVacancies);
     }
 }
